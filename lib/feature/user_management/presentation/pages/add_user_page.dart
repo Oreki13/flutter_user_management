@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import 'package:user_management/core/utils/email_validation.dart';
 import 'package:user_management/feature/user_management/presentation/bloc/city_bloc/city_bloc.dart';
 import 'package:user_management/feature/user_management/presentation/bloc/user_bloc/user_bloc.dart';
 import 'package:user_management/feature/user_management/presentation/widgets/button_widget.dart';
@@ -91,6 +92,23 @@ class _AddUserPageState extends State<AddUserPage> {
                   labelText: "Email",
                   hintText: "user@mail.com",
                   keyboardType: TextInputType.emailAddress,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(
+                      RegExp(r"\s\b|\b\s"),
+                    )
+                  ],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Harap isi Email";
+                    }
+
+                    if (!checkIsEmail(value)) {
+                      return "Harap masukan email yang benar";
+                    }
+
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 1.5.h,
